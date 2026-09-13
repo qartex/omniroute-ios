@@ -55,6 +55,15 @@ final class GatewayStore {
             instances[index].lastUpdatedAt = .now
             persist()
         }
+
+        // Auto-login for FreeLLMAP if credentials exist but we haven't tried yet
+        if instance.kind == .freeLLMAPI {
+            let credentials = credentials(for: instance)
+            if !credentials.managementPassword.isEmpty {
+                _ = try? await client.login(instance: instance, credentials: credentials)
+            }
+        }
+
         let dashboard = await client.dashboard(for: instance)
         dashboards[instance.id] = dashboard
         refreshingIDs.remove(instance.id)

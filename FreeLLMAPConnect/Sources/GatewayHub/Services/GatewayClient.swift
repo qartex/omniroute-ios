@@ -42,10 +42,19 @@ actor GatewayClient {
             guard let email = instance.email?.trimmingCharacters(in: .whitespacesAndNewlines), !email.isEmpty else {
                 throw GatewayClientError.loginRejected("E-Mail fehlt.")
             }
-            payload["email"] = email
+            payload["email"] = email.trimmingCharacters(in: .whitespacesAndNewlines)
         }
         let response = try await request(root: root, path: "api/auth/login", method: "POST", body: payload)
-        guard (200..<300).contains(response.status) else { throw error(from: response) }
+        guard (200..<300).contains(response.status) else {
+            // FreeLLMAP returns 401 with JSON envelope on auth failure
+            if response.status == 401 || response.status == 403 {
+                let text = String(data: response.data, encoding: .utf8) ?? ""
+                if text.contains("401") || text.contains("unauthorized") || text.contains("Unauthorized") {
+                    throw GatewayClientError.loginRejected("Falsches Passwort oder E-Mail.")
+                }
+            }
+            throw error(from: response)
+        }
 
         // Success shapes vary by server version. A 2xx response plus the session
         // cookie is the contract; URLSession keeps the cookie host-scoped.

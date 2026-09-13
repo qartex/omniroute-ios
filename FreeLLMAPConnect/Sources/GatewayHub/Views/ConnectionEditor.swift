@@ -143,11 +143,13 @@ struct ConnectionEditor: View {
         let credentials = GatewayCredentials(managementPassword: password, apiKey: apiKey)
         store.save(instance, credentials: credentials)
         isConnecting = true
-        await store.refresh(instance)
+
+        // Always attempt login for FreeLLMAP if credentials provided
         if !password.isEmpty {
             let signedIn = await store.signIn(instance, credentials: credentials)
             resultMessage = signedIn ? "Erfolgreich verbunden und angemeldet." : (store.notice ?? "Anmeldung abgelehnt.")
         } else {
+            await store.refresh(instance)
             resultMessage = "Erfolgreich gespeichert. Der öffentliche Status wurde geprüft."
         }
         if !apiKey.isEmpty, let keyMessage = await store.verifyAPIKey(instance, credentials: credentials) {
