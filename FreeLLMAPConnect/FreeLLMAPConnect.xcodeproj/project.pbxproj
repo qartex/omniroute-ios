@@ -1,0 +1,466 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		171173E096EC830516CB389A /* GatewayModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943E0D1EB094D7822B86A2DC /* GatewayModels.swift */; };
+		2B06769AFCEFBF06378C41F5 /* GatewayHubApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C960D1EE8762318D85C043B2 /* GatewayHubApp.swift */; };
+		4E62F45B0C648B9FD056F57E /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 697A91AC43A7BA615829C25D /* DashboardView.swift */; };
+		57B0AA9FD739A404A9AF35D6 /* InstancesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193009558706F90ADFA45212 /* InstancesView.swift */; };
+		9ECE31EABB2A246473E2227E /* GatewayStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE61F9613E98696DBB8E7EC /* GatewayStore.swift */; };
+		A45864D8019C171386F5EBFA /* GatewayClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E643E1B26FD4A637EE5D00 /* GatewayClient.swift */; };
+		B807FD29A0E17990D673092B /* GatewayRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05102BEDB066C7918F33EE09 /* GatewayRootView.swift */; };
+		CFC8D066A795C91466261D3F /* ConnectionEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6505240013C5C8BFEFAB82A /* ConnectionEditor.swift */; };
+		D2FBD09052CD0AA20B97D7C0 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648125D4682EE45559F9316F /* KeychainStore.swift */; };
+		FBE05A9891DDEC3EE4A0DC7B /* GatewayURLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD3D77590684D2131E0420A0 /* GatewayURLTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B0343FA456E22E0FF1930A91 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4AB1F57F98124DDC94B4A756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 573F50D50A1CD6C5BB8A70D5;
+			remoteInfo = FreeLLMAPConnect;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		05102BEDB066C7918F33EE09 /* GatewayRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayRootView.swift; sourceTree = "<group>"; };
+		07E643E1B26FD4A637EE5D00 /* GatewayClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayClient.swift; sourceTree = "<group>"; };
+		143234E9C4DB52F82CFFACE6 /* FreeLLMAPConnect.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = FreeLLMAPConnect.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		193009558706F90ADFA45212 /* InstancesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstancesView.swift; sourceTree = "<group>"; };
+		2DE61F9613E98696DBB8E7EC /* GatewayStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayStore.swift; sourceTree = "<group>"; };
+		444318CF0CF7AE4663D815A8 /* FreeLLMAPConnectTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = FreeLLMAPConnectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		648125D4682EE45559F9316F /* KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
+		697A91AC43A7BA615829C25D /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		943E0D1EB094D7822B86A2DC /* GatewayModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayModels.swift; sourceTree = "<group>"; };
+		BD3D77590684D2131E0420A0 /* GatewayURLTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayURLTests.swift; sourceTree = "<group>"; };
+		C6505240013C5C8BFEFAB82A /* ConnectionEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionEditor.swift; sourceTree = "<group>"; };
+		C960D1EE8762318D85C043B2 /* GatewayHubApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayHubApp.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		006BD5B0136DBE0262CDD5C2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				143234E9C4DB52F82CFFACE6 /* FreeLLMAPConnect.app */,
+				444318CF0CF7AE4663D815A8 /* FreeLLMAPConnectTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0DDE170F4515F17B6137324D /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				07E643E1B26FD4A637EE5D00 /* GatewayClient.swift */,
+				648125D4682EE45559F9316F /* KeychainStore.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		659F9082F752424EC69D280A /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				BD3D77590684D2131E0420A0 /* GatewayURLTests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		8D91DF410B39C3A43B50B4FF = {
+			isa = PBXGroup;
+			children = (
+				B5941FCAA8BA39DA015614CB /* GatewayHub */,
+				659F9082F752424EC69D280A /* Tests */,
+				006BD5B0136DBE0262CDD5C2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		979C8C2B51CF810DEE95FA8B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C6505240013C5C8BFEFAB82A /* ConnectionEditor.swift */,
+				697A91AC43A7BA615829C25D /* DashboardView.swift */,
+				05102BEDB066C7918F33EE09 /* GatewayRootView.swift */,
+				193009558706F90ADFA45212 /* InstancesView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		B5941FCAA8BA39DA015614CB /* GatewayHub */ = {
+			isa = PBXGroup;
+			children = (
+				DC7A8C2A641097438032E299 /* App */,
+				C0C17378FB83324AC0F9E670 /* Domain */,
+				0DDE170F4515F17B6137324D /* Services */,
+				979C8C2B51CF810DEE95FA8B /* Views */,
+			);
+			name = GatewayHub;
+			path = Sources/GatewayHub;
+			sourceTree = "<group>";
+		};
+		C0C17378FB83324AC0F9E670 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				943E0D1EB094D7822B86A2DC /* GatewayModels.swift */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		DC7A8C2A641097438032E299 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				C960D1EE8762318D85C043B2 /* GatewayHubApp.swift */,
+				2DE61F9613E98696DBB8E7EC /* GatewayStore.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		573F50D50A1CD6C5BB8A70D5 /* FreeLLMAPConnect */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 49983C314B20910A2887B020 /* Build configuration list for PBXNativeTarget "FreeLLMAPConnect" */;
+			buildPhases = (
+				9E746B5F49D397949405690D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FreeLLMAPConnect;
+			packageProductDependencies = (
+			);
+			productName = FreeLLMAPConnect;
+			productReference = 143234E9C4DB52F82CFFACE6 /* FreeLLMAPConnect.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B3C56C169D63031BAF3D4326 /* FreeLLMAPConnectTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F28D526C265DF7AECEB969AB /* Build configuration list for PBXNativeTarget "FreeLLMAPConnectTests" */;
+			buildPhases = (
+				2720198CD0CBA563CA5A6D7C /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				679B3273368DE6E5F00C295C /* PBXTargetDependency */,
+			);
+			name = FreeLLMAPConnectTests;
+			packageProductDependencies = (
+			);
+			productName = FreeLLMAPConnectTests;
+			productReference = 444318CF0CF7AE4663D815A8 /* FreeLLMAPConnectTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4AB1F57F98124DDC94B4A756 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					573F50D50A1CD6C5BB8A70D5 = {
+						DevelopmentTeam = NXD4CMA7AY;
+					};
+					B3C56C169D63031BAF3D4326 = {
+						DevelopmentTeam = NXD4CMA7AY;
+					};
+				};
+			};
+			buildConfigurationList = 336C847A714CBE692F60077F /* Build configuration list for PBXProject "FreeLLMAPConnect" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 8D91DF410B39C3A43B50B4FF;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 006BD5B0136DBE0262CDD5C2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				573F50D50A1CD6C5BB8A70D5 /* FreeLLMAPConnect */,
+				B3C56C169D63031BAF3D4326 /* FreeLLMAPConnectTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2720198CD0CBA563CA5A6D7C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FBE05A9891DDEC3EE4A0DC7B /* GatewayURLTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9E746B5F49D397949405690D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CFC8D066A795C91466261D3F /* ConnectionEditor.swift in Sources */,
+				4E62F45B0C648B9FD056F57E /* DashboardView.swift in Sources */,
+				A45864D8019C171386F5EBFA /* GatewayClient.swift in Sources */,
+				2B06769AFCEFBF06378C41F5 /* GatewayHubApp.swift in Sources */,
+				171173E096EC830516CB389A /* GatewayModels.swift in Sources */,
+				B807FD29A0E17990D673092B /* GatewayRootView.swift in Sources */,
+				9ECE31EABB2A246473E2227E /* GatewayStore.swift in Sources */,
+				57B0AA9FD739A404A9AF35D6 /* InstancesView.swift in Sources */,
+				D2FBD09052CD0AA20B97D7C0 /* KeychainStore.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		679B3273368DE6E5F00C295C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 573F50D50A1CD6C5BB8A70D5 /* FreeLLMAPConnect */;
+			targetProxy = B0343FA456E22E0FF1930A91 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1117ADBD2F2F0E6980589953 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 2;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = NXD4CMA7AY;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 2.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		C6CB636878ED5853E94B4DE6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Gateway Hub";
+				INFOPLIST_KEY_NSAppTransportSecurity_NSAllowsArbitraryLoads = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.qartex.freellmapconnect;
+				PRODUCT_MODULE_NAME = FreeLLMAPConnect;
+				PRODUCT_NAME = "FreeLLMAP Connect";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		E61A675CFB5FD5B0A2B23695 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Gateway Hub";
+				INFOPLIST_KEY_NSAppTransportSecurity_NSAllowsArbitraryLoads = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.qartex.freellmapconnect;
+				PRODUCT_MODULE_NAME = FreeLLMAPConnect;
+				PRODUCT_NAME = "FreeLLMAP Connect";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		EB6ED3F4046267E47F930F05 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FreeLLMAP Connect.app/FreeLLMAP Connect";
+			};
+			name = Debug;
+		};
+		F0A55F37390C5FF4DE41D506 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FreeLLMAP Connect.app/FreeLLMAP Connect";
+			};
+			name = Release;
+		};
+		F2553811D768C7B515030963 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 2;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = NXD4CMA7AY;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 2.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		336C847A714CBE692F60077F /* Build configuration list for PBXProject "FreeLLMAPConnect" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1117ADBD2F2F0E6980589953 /* Debug */,
+				F2553811D768C7B515030963 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		49983C314B20910A2887B020 /* Build configuration list for PBXNativeTarget "FreeLLMAPConnect" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E61A675CFB5FD5B0A2B23695 /* Debug */,
+				C6CB636878ED5853E94B4DE6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F28D526C265DF7AECEB969AB /* Build configuration list for PBXNativeTarget "FreeLLMAPConnectTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EB6ED3F4046267E47F930F05 /* Debug */,
+				F0A55F37390C5FF4DE41D506 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4AB1F57F98124DDC94B4A756 /* Project object */;
+}
