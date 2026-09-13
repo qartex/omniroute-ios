@@ -35,8 +35,12 @@ private struct DashboardContent: View {
             LazyVStack(alignment: .leading, spacing: 16) {
                 DashboardHeader(instance: instance, health: snapshot.health)
                 GatewayStatusCard(snapshot: snapshot)
-                MetricsGrid(snapshot: snapshot)
-                if let pool = snapshot.tokenPool { TokenPoolCard(pool: pool) }
+                if instance.kind == .freeLLMAPI {
+                    FreeLLMAPPlatformsCard(platforms: snapshot.freeLLMAPPlatforms ?? [], keyCount: snapshot.freeLLMAPKeyCount ?? 0, modelCount: snapshot.freeLLMAPModelCount ?? 0)
+                } else {
+                    MetricsGrid(snapshot: snapshot)
+                    if let pool = snapshot.tokenPool { TokenPoolCard(pool: pool) }
+                }
                 if snapshot.unavailableSections.contains(.overview) {
                     UnavailableNotice(title: "Einige Detailwerte fehlen", message: "Diese Instanz liefert einzelne Management-Endpunkte nicht oder die Anmeldung fehlt.")
                 }
@@ -233,5 +237,72 @@ struct StatusPill: View {
             .font(.caption.weight(.semibold))
             .foregroundStyle(color)
             .accessibilityLabel("Status: \(state.title)")
+    }
+}
+
+private struct FreeLLMAPPlatformsCard: View {
+    let platforms: [FreeLLMAPPlatform]
+    let keyCount: Int
+    let modelCount: Int
+
+    var body: some View {
+        DashboardCard(title: "Plattformen & Schlüssel", systemImage: "server.rack") {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Label("\(keyCount) Schlüssel", systemImage: "key.fill")
+                    Spacer()
+                    Label("\(modelCount) Modelle", systemImage: "cpu")
+                }
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+                if platforms.isEmpty {
+                    Text("Keine Plattformen konfiguriert")
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                } else {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 8) {
+                            ForEach(platforms.prefix(10)) { platform in
+                                PlatformBadge(platform: platform)
+                            }
+                            if platforms.count > 10 {
+                                Text("+\(platforms.count - 10) mehr")
+                                    .font(.caption2)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+private struct PlatformBadge: View {
+    let platform: FreeLLMAPPlatform
+
+    var body: some View {
+        VStack(spacing: 4) {
+            ZStack {
+                Circle()
+                    .fill(platform.hasProvider == true ? Color.green.opacity(0.2) : Color.gray.opacity(0.2))
+                    .frame(width: 32, height: 32)
+                Circle()
+                    .fill(platform.hasProvider == true ? Color.green : Color.gray)
+                    .frame(width: 12, height: 12)
+            }
+            Text(platform.platform)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+        }
+        .frame(width: 56)
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(platform.hasProvider == true ? Color.green.opacity(0.5) : Color.gray.opacity(0.3), lineWidth: 1)
+        )
+        .padding(.horizontal, 4)
+        .padding(.vertical, 6)
     }
 }

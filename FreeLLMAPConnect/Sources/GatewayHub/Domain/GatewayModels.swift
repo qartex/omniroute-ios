@@ -104,11 +104,29 @@ struct GatewayDashboard: Hashable, Sendable {
     var combos: [GatewayCombo] = []
     var consoleLogs: [GatewayConsoleLog] = []
     var callLogs: [GatewayCallLog] = []
+    // FreeLLMAP-specific fields
+    var freeLLMAPPlatforms: [FreeLLMAPPlatform]? = nil
+    var freeLLMAPKeyCount: Int? = nil
+    var freeLLMAPModelCount: Int? = nil
     var unavailableSections: Set<DashboardSection> = []
 
     static func placeholder(health: GatewayHealth) -> GatewayDashboard {
         GatewayDashboard(health: health)
     }
+}
+
+// FreeLLMAP-specific models
+struct FreeLLMAPPlatform: Identifiable, Codable, Hashable {
+    var id: String { platform }
+    var platform: String
+    var hasProvider: Bool?
+    var totalKeys: Int?
+    var healthyKeys: Int?
+    var rateLimitedKeys: Int?
+    var invalidKeys: Int?
+    var errorKeys: Int?
+    var unknownKeys: Int?
+    var enabledKeys: Int?
 }
 
 struct GatewayMemory: Hashable, Sendable {

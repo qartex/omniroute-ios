@@ -131,46 +131,88 @@ actor GatewayClient {
             return .placeholder(health: health)
         }
 
-        // Use authenticated requests for FreeLLMAP (Bearer token), regular for OmniRoute
-        let monitoring = instance.kind == .freeLLMAPI ?
-            try? await optionalJSONObjectAuthenticated(root: root, path: "api/health", instanceID: instance.id) :  // FreeLLMAP uses api/health instead of monitoring/health
-            await optionalJSONObject(root: root, path: "api/monitoring/health")
-        let database = await optionalJSONObject(root: root, path: "api/db/health")
-        let tokenPool = instance.kind == .freeLLMAPI ?
-            try? await optionalJSONObjectAuthenticated(root: root, path: "api/free-tier/summary", instanceID: instance.id) :
-            await optionalJSONObject(root: root, path: "api/free-tier/summary")
-        let providers = instance.kind == .freeLLMAPI ?
-            try? await optionalJSONObjectAuthenticated(root: root, path: "api/providers", instanceID: instance.id) :
-            await optionalJSONObject(root: root, path: "api/providers")
-        let catalog = instance.kind == .freeLLMAPI ?
-            try? await optionalJSONObjectAuthenticated(root: root, path: "api/pricing/models", instanceID: instance.id) :
-            await optionalJSONObject(root: root, path: "api/pricing/models")
-        let models = instance.kind == .freeLLMAPI ?
-            try? await optionalJSONObjectAuthenticated(root: root, path: "api/models", instanceID: instance.id) :
-            await optionalJSONObject(root: root, path: "api/models")
-        let combos = instance.kind == .freeLLMAPI ?
-            try? await optionalJSONObjectAuthenticated(root: root, path: "api/combo", instanceID: instance.id) :  // FreeLLMAP uses api/combo instead of combos/auto
-            await optionalJSONObject(root: root, path: "api/combos/auto")
-        let logs = instance.kind == .freeLLMAPI ?
-            try? await optionalJSONArrayAuthenticated(root: root, path: "api/logs", instanceID: instance.id) :  // FreeLLMAP uses api/logs instead of api/logs/console
-            await optionalJSONArray(root: root, path: "api/logs/console")
-        let calls = instance.kind == .freeLLMAPI ?
-            try? await optionalJSONArrayAuthenticated(root: root, path: "api/usage", instanceID: instance.id) :  // FreeLLMAP uses api/usage instead of api/usage/call-logs
-            await optionalJSONArray(root: root, path: "api/usage/call-logs")
-
+        // Different API structures for FreeLLMAP vs OmniRoute
         var snapshot = GatewayDashboard(health: health)
-        populateOverview(&snapshot, monitoring: monitoring, database: database, tokenPool: tokenPool)
-        snapshot.providers = parseProviders(providers)
-        snapshot.providerCatalog = parseProviderCatalog(catalog)
-        snapshot.models = parseModels(models)
-        snapshot.combos = parseCombos(combos)
-        snapshot.consoleLogs = parseConsoleLogs(logs)
-        snapshot.callLogs = parseCallLogs(calls)
 
-        if monitoring == nil || database == nil || tokenPool == nil { snapshot.unavailableSections.insert(.overview) }
-        if providers == nil || catalog == nil { snapshot.unavailableSections.insert(.providers) }
-        if models == nil || combos == nil { snapshot.unavailableSections.insert(.models) }
-        if logs == nil && calls == nil { snapshot.unavailableSections.insert(.activity) }
+        if instance.kind == .freeLLMAPI {
+            // FreeLLMAP API structure
+            let healthData = try? await optionalJSONObjectAuthenticated(root: root, path: "api/health", instanceID: instance.id)
+            let models = try? await optionalJSONArrayAuthenticated(root: root, path: "api/models", instanceID: instance.id)
+            let logsData = try? await optionalJSONObjectAuthenticated(root: root, path: "api/logs", instanceID: instance.id)
+
+            // Parse platforms from health data
+            if let healthData = healthData {
+                let platforms = healthData["platforms"] as? [[String: Any]] ?? []
+                snapshot.freeLLMAPPlatforms = platforms.map { dict in
+                    FreeLLMAPPlatform(
+                        platform: dict["platform"] as? String ?? "",
+                        hasProvider: dict["hasProvider"] as? Bool,
+                        totalKeys: dict["totalKeys"] as? Int,
+                        healthyKeys: dict["healthyKeys"] as? Int,
+                        rateLimitedKeys: dict["rateLimitedKeys"] as? Int,
+                        invalidKeys: dict["invalidKeys"] as? Int,
+                        errorKeys: dict["errorKeys"] as? Int,
+                        unknownKeys: dict["unknownKeys"] as? Int,
+                        enabledKeys: dict["enabledKeys"] as? Int
+                    )
+                }
+                snapshot.freeLLMAPKeyCount = (healthData["keys"] as? [Any])?.count ?? (healthData["keys"] as? [String: Any])?.count
+                snapshot.freeLLMAPModelCount = models?.count
+            }
+
+            // Parse models
+            if let models = models {
+                snapshot.models = models.compactMap { dict in
+                    let platform = dict["platform"] as? String ?? ""
+                    let modelId = dict["modelId"] as? String ?? ""
+                    let displayName = dict["displayName"] as? String ?? modelId
+                    let enabled = dict["enabled"] as? Bool ?? true
+                    return GatewayModel(id: "\(platform)/\(modelId)", name: displayName, provider: platform, available: enabled)
+                }
+            }
+
+            // Parse logs
+            if let logsData = logsData, let entries = logsData["entries"] as? [[String: Any]] {
+                snapshot.consoleLogs = entries.compactMap { dict in
+                    let ts = dict["ts"] as? String ?? ""
+                    let msg = dict["message"] as? String ?? ""
+                    let level = dict["level"] as? String ?? "info"
+                    let source = dict["source"] as? String
+                    return GatewayConsoleLog(id: "\(ts)-\(msg.prefix(40))", timestamp: ts, level: level, component: source, message: msg)
+                }
+            }
+
+            // FreeLLMAP has these sections available
+            snapshot.unavailableSections.remove(.overview)
+            snapshot.unavailableSections.remove(.models)
+            snapshot.unavailableSections.remove(.activity)
+
+        } else {
+            // OmniRoute API structure
+            let monitoring = await optionalJSONObject(root: root, path: "api/monitoring/health")
+            let database = await optionalJSONObject(root: root, path: "api/db/health")
+            let tokenPool = await optionalJSONObject(root: root, path: "api/free-tier/summary")
+            let providers = await optionalJSONObject(root: root, path: "api/providers")
+            let catalog = await optionalJSONObject(root: root, path: "api/pricing/models")
+            let models = await optionalJSONObject(root: root, path: "api/models")
+            let combos = await optionalJSONObject(root: root, path: "api/combos/auto")
+            let logs = await optionalJSONArray(root: root, path: "api/logs/console")
+            let calls = await optionalJSONArray(root: root, path: "api/usage/call-logs")
+
+            populateOverview(&snapshot, monitoring: monitoring, database: database, tokenPool: tokenPool)
+            snapshot.providers = parseProviders(providers)
+            snapshot.providerCatalog = parseProviderCatalog(catalog)
+            snapshot.models = parseModels(models)
+            snapshot.combos = parseCombos(combos)
+            snapshot.consoleLogs = parseConsoleLogs(logs)
+            snapshot.callLogs = parseCallLogs(calls)
+
+            if monitoring == nil || database == nil || tokenPool == nil { snapshot.unavailableSections.insert(.overview) }
+            if providers == nil || catalog == nil { snapshot.unavailableSections.insert(.providers) }
+            if models == nil || combos == nil { snapshot.unavailableSections.insert(.models) }
+            if logs == nil && calls == nil { snapshot.unavailableSections.insert(.activity) }
+        }
+
         return snapshot
     }
 
