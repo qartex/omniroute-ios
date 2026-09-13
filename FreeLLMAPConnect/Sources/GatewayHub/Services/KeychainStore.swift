@@ -52,13 +52,19 @@ extension GatewayCredentials {
     static func load(for instanceID: UUID) -> GatewayCredentials {
         GatewayCredentials(
             managementPassword: KeychainStore.value(for: "\(instanceID.uuidString).managementPassword"),
-            apiKey: KeychainStore.value(for: "\(instanceID.uuidString).apiKey")
+            apiKey: KeychainStore.value(for: "\(instanceID.uuidString).apiKey"),
+            authToken: KeychainStore.value(for: "\(instanceID.uuidString).authToken").isEmpty ? nil : KeychainStore.value(for: "\(instanceID.uuidString).authToken")
         )
     }
 
     func save(for instanceID: UUID) {
         save(managementPassword, account: "\(instanceID.uuidString).managementPassword")
         save(apiKey, account: "\(instanceID.uuidString).apiKey")
+        if let token = authToken {
+            save(token, account: "\(instanceID.uuidString).authToken")
+        } else {
+            KeychainStore.delete(account: "\(instanceID.uuidString).authToken")
+        }
     }
 
     private func save(_ value: String, account: String) {
@@ -69,5 +75,6 @@ extension GatewayCredentials {
     static func delete(for instanceID: UUID) {
         KeychainStore.delete(account: "\(instanceID.uuidString).managementPassword")
         KeychainStore.delete(account: "\(instanceID.uuidString).apiKey")
+        KeychainStore.delete(account: "\(instanceID.uuidString).authToken")
     }
 }

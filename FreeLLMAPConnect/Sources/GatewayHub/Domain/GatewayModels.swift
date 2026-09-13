@@ -78,6 +78,7 @@ struct GatewayHealth: Codable, Hashable, Sendable {
 struct GatewayCredentials: Equatable {
     var managementPassword: String = ""
     var apiKey: String = ""
+    var authToken: String? = nil  // FreeLLMAP Bearer token
 }
 
 enum DashboardSection: String, CaseIterable, Hashable, Sendable {

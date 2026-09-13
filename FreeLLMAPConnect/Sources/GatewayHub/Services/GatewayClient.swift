@@ -22,6 +22,8 @@ enum GatewayClientError: LocalizedError, Equatable {
 
 actor GatewayClient {
     private let session: URLSession
+    // Store auth tokens per instance (FreeLLMAP uses Bearer tokens)
+    private var authTokens: [UUID: String] = [:]
 
     init() {
         let configuration = URLSessionConfiguration.default
@@ -46,7 +48,6 @@ actor GatewayClient {
         }
         let response = try await request(root: root, path: "api/auth/login", method: "POST", body: payload)
         guard (200..<300).contains(response.status) else {
-            // FreeLLMAP returns 401 with JSON envelope on auth failure
             if response.status == 401 || response.status == 403 {
                 let text = String(data: response.data, encoding: .utf8) ?? ""
                 if text.contains("401") || text.contains("unauthorized") || text.contains("Unauthorized") {
@@ -56,12 +57,11 @@ actor GatewayClient {
             throw error(from: response)
         }
 
-        // Success shapes vary by server version. A 2xx response plus the session
-        // cookie is the contract; URLSession keeps the cookie host-scoped.
-        if let object = jsonObject(response.data) as? [String: Any],
-           let success = object["success"] as? Bool,
-           !success {
-            throw GatewayClientError.loginRejected(message(from: object) ?? "Passwort oder E-Mail prüfen.")
+        // Extract token for FreeLLMAP (Bearer auth)
+        if instance.kind == .freeLLMAPI,
+           let object = jsonObject(response.data) as? [String: Any],
+           let token = object["token"] as? String, !token.isEmpty {
+            authTokens[instance.id] = token
         }
     }
 
@@ -69,14 +69,19 @@ actor GatewayClient {
         do {
             let root = try GatewayURL.normalize(instance.rootURL)
             let started = ContinuousClock.now
-            let ping = try await request(root: root, path: "api/health/ping")
+            // FreeLLMAP doesn't have api/health/ping, use api/health instead
+            let path = instance.kind == .freeLLMAPI ? "api/health" : "api/health/ping"
+            let ping = try await request(root: root, path: path)
             let elapsed = started.duration(to: .now)
             let latency = Int(elapsed.components.seconds * 1_000) + Int(elapsed.components.attoseconds / 1_000_000_000_000_000)
             if (200..<300).contains(ping.status) {
                 let object = jsonObject(ping.data) as? [String: Any]
-                let status = (object?["status"] as? String)?.lowercased() ?? "ok"
+                // FreeLLMAP returns platform info, OmniRoute returns status
+                let status = (object?["status"] as? String)?.lowercased() ??
+                             (object?["platform"] as? String) != nil ? "ok" : "unknown"
                 let state: GatewayHealth.HealthState = ["ok", "healthy", "online"].contains(status) ? .healthy : .warning
-                let deeper = try? await request(root: root, path: "api/monitoring/health")
+                let deeper = instance.kind == .omniRoute ?
+                    try? await request(root: root, path: "api/monitoring/health") : nil
                 let deepObject = deeper.flatMap { jsonObject($0.data) as? [String: Any] }
                 return GatewayHealth(
                     state: state,
@@ -92,18 +97,33 @@ actor GatewayClient {
     }
 
     func verifyAPIKey(for instance: GatewayInstance, credentials: GatewayCredentials) async throws -> Int {
-        guard !credentials.apiKey.isEmpty else { return 0 }
-        let root = try GatewayURL.normalize(instance.rootURL)
-        let response = try await request(
-            root: GatewayURL.apiURL(for: root),
-            path: "models",
-            headers: ["Authorization": "Bearer \(credentials.apiKey)"]
-        )
-        guard response.status != 401 && response.status != 403 else { throw GatewayClientError.apiKeyRejected }
-        guard (200..<300).contains(response.status) else { throw error(from: response) }
-        let object = jsonObject(response.data) as? [String: Any]
-        return (object?["data"] as? [Any])?.count ?? (object?["models"] as? [Any])?.count ?? 0
-    }
+            guard !credentials.apiKey.isEmpty else { return 0 }
+            let root = try GatewayURL.normalize(instance.rootURL)
+            let url = GatewayURL.apiURL(for: root).appendingPathComponent("models")
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+        
+            // For FreeLLMAP, use the auth token from login (Bearer token)
+            // For OmniRoute, use the API key (Bearer token)
+            if instance.kind == .freeLLMAPI,
+               let token = authTokens[instance.id] {
+                request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            } else {
+                request.setValue("Bearer \(credentials.apiKey)", forHTTPHeaderField: "Authorization")
+            }
+        
+            let (data, response) = try await session.data(for: request)
+            guard let http = response as? HTTPURLResponse else { throw GatewayClientError.unavailable("Ungültige Serverantwort.") }
+        
+            guard (200..<300).contains(http.statusCode) else {
+                if http.statusCode == 401 || http.statusCode == 403 { throw GatewayClientError.apiKeyRejected }
+                throw GatewayClientError.server(status: http.statusCode, message: String(data: data, encoding: .utf8) ?? "Unbekannter Fehler")
+            }
+        
+            let object = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+            return (object?["data"] as? [Any])?.count ?? (object?["models"] as? [Any])?.count ?? 0
+        }
 
     func dashboard(for instance: GatewayInstance) async -> GatewayDashboard {
         let health = await health(for: instance)
@@ -111,15 +131,32 @@ actor GatewayClient {
             return .placeholder(health: health)
         }
 
-        let monitoring = await optionalJSONObject(root: root, path: "api/monitoring/health")
+        // Use authenticated requests for FreeLLMAP (Bearer token), regular for OmniRoute
+        let monitoring = instance.kind == .freeLLMAPI ?
+            try? await optionalJSONObjectAuthenticated(root: root, path: "api/health", instanceID: instance.id) :  // FreeLLMAP uses api/health instead of monitoring/health
+            await optionalJSONObject(root: root, path: "api/monitoring/health")
         let database = await optionalJSONObject(root: root, path: "api/db/health")
-        let tokenPool = await optionalJSONObject(root: root, path: "api/free-tier/summary")
-        let providers = await optionalJSONObject(root: root, path: "api/providers")
-        let catalog = await optionalJSONObject(root: root, path: "api/pricing/models")
-        let models = await optionalJSONObject(root: root, path: "api/models")
-        let combos = await optionalJSONObject(root: root, path: "api/combos/auto")
-        let logs = await optionalJSONArray(root: root, path: "api/logs/console")
-        let calls = await optionalJSONArray(root: root, path: "api/usage/call-logs")
+        let tokenPool = instance.kind == .freeLLMAPI ?
+            try? await optionalJSONObjectAuthenticated(root: root, path: "api/free-tier/summary", instanceID: instance.id) :
+            await optionalJSONObject(root: root, path: "api/free-tier/summary")
+        let providers = instance.kind == .freeLLMAPI ?
+            try? await optionalJSONObjectAuthenticated(root: root, path: "api/providers", instanceID: instance.id) :
+            await optionalJSONObject(root: root, path: "api/providers")
+        let catalog = instance.kind == .freeLLMAPI ?
+            try? await optionalJSONObjectAuthenticated(root: root, path: "api/pricing/models", instanceID: instance.id) :
+            await optionalJSONObject(root: root, path: "api/pricing/models")
+        let models = instance.kind == .freeLLMAPI ?
+            try? await optionalJSONObjectAuthenticated(root: root, path: "api/models", instanceID: instance.id) :
+            await optionalJSONObject(root: root, path: "api/models")
+        let combos = instance.kind == .freeLLMAPI ?
+            try? await optionalJSONObjectAuthenticated(root: root, path: "api/combo", instanceID: instance.id) :  // FreeLLMAP uses api/combo instead of combos/auto
+            await optionalJSONObject(root: root, path: "api/combos/auto")
+        let logs = instance.kind == .freeLLMAPI ?
+            try? await optionalJSONArrayAuthenticated(root: root, path: "api/logs", instanceID: instance.id) :  // FreeLLMAP uses api/logs instead of api/logs/console
+            await optionalJSONArray(root: root, path: "api/logs/console")
+        let calls = instance.kind == .freeLLMAPI ?
+            try? await optionalJSONArrayAuthenticated(root: root, path: "api/usage", instanceID: instance.id) :  // FreeLLMAP uses api/usage instead of api/usage/call-logs
+            await optionalJSONArray(root: root, path: "api/usage/call-logs")
 
         var snapshot = GatewayDashboard(health: health)
         populateOverview(&snapshot, monitoring: monitoring, database: database, tokenPool: tokenPool)
@@ -163,31 +200,32 @@ actor GatewayClient {
     }
 
     private func request(
-        root: URL,
-        path: String,
-        method: String = "GET",
-        body: [String: String]? = nil,
-        headers: [String: String] = [:]
-    ) async throws -> (status: Int, data: Data) {
-        let url = root.appendingPathComponent(path)
-        var request = URLRequest(url: url)
-        request.httpMethod = method
-        request.setValue("application/json", forHTTPHeaderField: "Accept")
-        headers.forEach { request.setValue($0.value, forHTTPHeaderField: $0.key) }
-        if let body {
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.httpBody = try JSONEncoder().encode(body)
-        }
-        do {
-            let (data, response) = try await session.data(for: request)
-            guard let http = response as? HTTPURLResponse else { throw GatewayClientError.unavailable("Ungültige Serverantwort.") }
-            return (http.statusCode, data)
-        } catch let error as GatewayClientError {
-            throw error
-        } catch {
-            throw GatewayClientError.unavailable("Server nicht erreichbar: \(error.localizedDescription)")
-        }
-    }
+                root: URL,
+                path: String,
+                method: String = "GET",
+                body: [String: String]? = nil,
+                headers: [String: String] = [:]
+            ) async throws -> (status: Int, data: Data) {
+                let url = root.appendingPathComponent(path)
+                var request = URLRequest(url: url)
+                request.httpMethod = method
+                request.setValue("application/json", forHTTPHeaderField: "Accept")
+                headers.forEach { request.setValue($0.value, forHTTPHeaderField: $0.key) }
+            
+                if let body {
+                    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                    request.httpBody = try JSONEncoder().encode(body)
+                }
+                do {
+                    let (data, response) = try await session.data(for: request)
+                    guard let http = response as? HTTPURLResponse else { throw GatewayClientError.unavailable("Ungültige Serverantwort.") }
+                    return (http.statusCode, data)
+                } catch let error as GatewayClientError {
+                    throw error
+                } catch {
+                    throw GatewayClientError.unavailable("Server nicht erreichbar: \\(error.localizedDescription)")
+                }
+            }
 
     private func requestJSON(
         root: URL,
@@ -217,8 +255,68 @@ actor GatewayClient {
         return jsonObject(response.data) as? [String: Any]
     }
 
+    // Authenticated request for FreeLLMAP (Bearer token)
+    private func authenticatedRequest(
+        root: URL,
+        path: String,
+        method: String = "GET",
+        body: [String: String]? = nil,
+        instanceID: UUID
+    ) async throws -> (status: Int, data: Data) {
+        var headers: [String: String] = [:]
+        if let token = authTokens[instanceID] {
+            headers["Authorization"] = "Bearer \(token)"
+        }
+        return try await request(root: root, path: path, method: method, body: body, headers: headers)
+    }
+
+    // Authenticated JSON request for FreeLLMAP (Bearer token)
+    private func authenticatedRequestJSON(
+        root: URL,
+        path: String,
+        method: String,
+        body: [String: Any],
+        instanceID: UUID
+    ) async throws -> (status: Int, data: Data) {
+        var headers: [String: String] = [
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        ]
+        if let token = authTokens[instanceID] {
+            headers["Authorization"] = "Bearer \(token)"
+        }
+        let url = root.appendingPathComponent(path)
+        var request = URLRequest(url: url)
+        request.httpMethod = method
+        headers.forEach { request.setValue($0.value, forHTTPHeaderField: $0.key) }
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+        do {
+            let (data, response) = try await session.data(for: request)
+            guard let http = response as? HTTPURLResponse else { throw GatewayClientError.unavailable("Ungültige Serverantwort.") }
+            return (http.statusCode, data)
+        } catch let error as GatewayClientError {
+            throw error
+        } catch {
+            throw GatewayClientError.unavailable("Server nicht erreichbar: \(error.localizedDescription)")
+        }
+    }
+
+    // Authenticated version for FreeLLMAP (Bearer token)
+    private func optionalJSONObjectAuthenticated(root: URL, path: String, instanceID: UUID) async -> [String: Any]? {
+        guard let response = try? await authenticatedRequest(root: root, path: path, instanceID: instanceID), (200..<300).contains(response.status) else { return nil }
+        return jsonObject(response.data) as? [String: Any]
+    }
+
     private func optionalJSONArray(root: URL, path: String) async -> [[String: Any]]? {
         guard let response = try? await request(root: root, path: path), (200..<300).contains(response.status) else { return nil }
+        if let array = jsonObject(response.data) as? [[String: Any]] { return array }
+        let object = jsonObject(response.data) as? [String: Any]
+        return (object?["logs"] as? [[String: Any]]) ?? (object?["data"] as? [[String: Any]])
+    }
+
+    // Authenticated version for FreeLLMAP (Bearer token)
+    private func optionalJSONArrayAuthenticated(root: URL, path: String, instanceID: UUID) async -> [[String: Any]]? {
+        guard let response = try? await authenticatedRequest(root: root, path: path, instanceID: instanceID), (200..<300).contains(response.status) else { return nil }
         if let array = jsonObject(response.data) as? [[String: Any]] { return array }
         let object = jsonObject(response.data) as? [String: Any]
         return (object?["logs"] as? [[String: Any]]) ?? (object?["data"] as? [[String: Any]])
