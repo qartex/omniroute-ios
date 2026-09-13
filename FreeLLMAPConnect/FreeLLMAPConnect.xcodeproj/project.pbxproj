@@ -11,13 +11,16 @@
 		2B06769AFCEFBF06378C41F5 /* GatewayHubApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C960D1EE8762318D85C043B2 /* GatewayHubApp.swift */; };
 		4E62F45B0C648B9FD056F57E /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 697A91AC43A7BA615829C25D /* DashboardView.swift */; };
 		57B0AA9FD739A404A9AF35D6 /* InstancesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193009558706F90ADFA45212 /* InstancesView.swift */; };
+		5E40A85A23AC69F3D90F57EB /* ProvidersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D31197BD67750CB9ECCBB6C /* ProvidersView.swift */; };
 		9ECE31EABB2A246473E2227E /* GatewayStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE61F9613E98696DBB8E7EC /* GatewayStore.swift */; };
 		A45864D8019C171386F5EBFA /* GatewayClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E643E1B26FD4A637EE5D00 /* GatewayClient.swift */; };
 		B807FD29A0E17990D673092B /* GatewayRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05102BEDB066C7918F33EE09 /* GatewayRootView.swift */; };
 		CFC8D066A795C91466261D3F /* ConnectionEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6505240013C5C8BFEFAB82A /* ConnectionEditor.swift */; };
 		D2FBD09052CD0AA20B97D7C0 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648125D4682EE45559F9316F /* KeychainStore.swift */; };
+		EC415C9B0E4ACE594F8722F5 /* ModelsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF548EC86D5AC9A449B961DB /* ModelsView.swift */; };
 		F0E55DA26E612CA958107CAC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C81B3D17D0B823A9D57C2503 /* Assets.xcassets */; };
 		FBE05A9891DDEC3EE4A0DC7B /* GatewayURLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD3D77590684D2131E0420A0 /* GatewayURLTests.swift */; };
+		FEBF3B2E4848BB642B22E5CE /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C74BF8A7862AB8F4A69C3D7 /* ActivityView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,10 +40,13 @@
 		193009558706F90ADFA45212 /* InstancesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstancesView.swift; sourceTree = "<group>"; };
 		2DE61F9613E98696DBB8E7EC /* GatewayStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayStore.swift; sourceTree = "<group>"; };
 		444318CF0CF7AE4663D815A8 /* FreeLLMAPConnectTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = FreeLLMAPConnectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D31197BD67750CB9ECCBB6C /* ProvidersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvidersView.swift; sourceTree = "<group>"; };
 		648125D4682EE45559F9316F /* KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
 		697A91AC43A7BA615829C25D /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		6C74BF8A7862AB8F4A69C3D7 /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
 		943E0D1EB094D7822B86A2DC /* GatewayModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayModels.swift; sourceTree = "<group>"; };
 		BD3D77590684D2131E0420A0 /* GatewayURLTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayURLTests.swift; sourceTree = "<group>"; };
+		BF548EC86D5AC9A449B961DB /* ModelsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsView.swift; sourceTree = "<group>"; };
 		C6505240013C5C8BFEFAB82A /* ConnectionEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionEditor.swift; sourceTree = "<group>"; };
 		C81B3D17D0B823A9D57C2503 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C960D1EE8762318D85C043B2 /* GatewayHubApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayHubApp.swift; sourceTree = "<group>"; };
@@ -85,10 +91,13 @@
 		979C8C2B51CF810DEE95FA8B /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				6C74BF8A7862AB8F4A69C3D7 /* ActivityView.swift */,
 				C6505240013C5C8BFEFAB82A /* ConnectionEditor.swift */,
 				697A91AC43A7BA615829C25D /* DashboardView.swift */,
 				05102BEDB066C7918F33EE09 /* GatewayRootView.swift */,
 				193009558706F90ADFA45212 /* InstancesView.swift */,
+				BF548EC86D5AC9A449B961DB /* ModelsView.swift */,
+				4D31197BD67750CB9ECCBB6C /* ProvidersView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -223,6 +232,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FEBF3B2E4848BB642B22E5CE /* ActivityView.swift in Sources */,
 				CFC8D066A795C91466261D3F /* ConnectionEditor.swift in Sources */,
 				4E62F45B0C648B9FD056F57E /* DashboardView.swift in Sources */,
 				A45864D8019C171386F5EBFA /* GatewayClient.swift in Sources */,
@@ -232,6 +242,8 @@
 				9ECE31EABB2A246473E2227E /* GatewayStore.swift in Sources */,
 				57B0AA9FD739A404A9AF35D6 /* InstancesView.swift in Sources */,
 				D2FBD09052CD0AA20B97D7C0 /* KeychainStore.swift in Sources */,
+				EC415C9B0E4ACE594F8722F5 /* ModelsView.swift in Sources */,
+				5E40A85A23AC69F3D90F57EB /* ProvidersView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,7 +292,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 11;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = NXD4CMA7AY;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -428,7 +440,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 11;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = NXD4CMA7AY;
 				ENABLE_NS_ASSERTIONS = NO;

@@ -13,17 +13,27 @@ struct GatewayRootView: View {
                     NavigationStack {
                         DashboardView()
                     }
-                    .tabItem { Label("Status", systemImage: "gauge.with.dots.needle.50percent") }
+                    .tabItem { Label("Übersicht", systemImage: "gauge.with.dots.needle.50percent") }
 
                     NavigationStack {
-                        InstancesView { editor = $0 }
+                        ActivityView()
                     }
-                    .tabItem { Label("Server", systemImage: "server.rack") }
+                    .tabItem { Label("Aktivität", systemImage: "waveform.path.ecg") }
 
                     NavigationStack {
-                        SecurityView { editor = $0 }
+                        ProvidersView()
                     }
-                    .tabItem { Label("Einstellungen", systemImage: "gearshape") }
+                    .tabItem { Label("Provider", systemImage: "server.rack") }
+
+                    NavigationStack {
+                        ModelsView()
+                    }
+                    .tabItem { Label("Modelle", systemImage: "cpu") }
+
+                    NavigationStack {
+                        MoreView { editor = $0 }
+                    }
+                    .tabItem { Label("Mehr", systemImage: "ellipsis") }
                 }
             }
         }
@@ -90,12 +100,20 @@ private struct WelcomeView: View {
     }
 }
 
-private struct SecurityView: View {
+struct MoreView: View {
     @Environment(GatewayStore.self) private var store
     let edit: (EditorDestination) -> Void
 
     var body: some View {
+        @Bindable var store = store
         List {
+            Section("Aktive Instanz") {
+                Picker("Server", selection: $store.selectedID) {
+                    ForEach(store.instances) { instance in
+                        Text(instance.name).tag(Optional(instance.id))
+                    }
+                }
+            }
             Section("Sicherheit") {
                 Label("Passwörter und API-Keys werden pro Server im Schlüsselbund gespeichert.", systemImage: "key.horizontal.fill")
                 Label("Management-Passwort und API-Key sind getrennte Berechtigungen.", systemImage: "lock.shield")
@@ -118,6 +136,12 @@ private struct SecurityView: View {
                 }
             }
         }
-        .navigationTitle("Einstellungen")
+        .navigationTitle("Mehr")
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button { edit(.add) } label: { Image(systemName: "plus") }
+                    .accessibilityLabel("Server hinzufügen")
+            }
+        }
     }
 }

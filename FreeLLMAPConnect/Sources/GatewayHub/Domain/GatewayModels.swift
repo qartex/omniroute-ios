@@ -52,13 +52,13 @@ struct GatewayInstance: Codable, Identifiable, Hashable {
     }
 }
 
-struct GatewayHealth: Codable, Hashable {
+struct GatewayHealth: Codable, Hashable, Sendable {
     var state: HealthState
     var message: String
     var version: String?
     var latencyMilliseconds: Int?
 
-    enum HealthState: String, Codable, Hashable {
+    enum HealthState: String, Codable, Hashable, Sendable {
         case healthy
         case warning
         case offline
@@ -78,6 +78,105 @@ struct GatewayHealth: Codable, Hashable {
 struct GatewayCredentials: Equatable {
     var managementPassword: String = ""
     var apiKey: String = ""
+}
+
+enum DashboardSection: String, CaseIterable, Hashable, Sendable {
+    case overview
+    case activity
+    case providers
+    case models
+}
+
+struct GatewayDashboard: Hashable, Sendable {
+    var health: GatewayHealth
+    var uptimeSeconds: Double? = nil
+    var nodeVersion: String? = nil
+    var platform: String? = nil
+    var activeConnections: Int? = nil
+    var memory: GatewayMemory? = nil
+    var databaseHealthy: Bool? = nil
+    var tokenPool: GatewayTokenPool? = nil
+    var providerSummary: GatewayProviderSummary? = nil
+    var providers: [GatewayProvider] = []
+    var providerCatalog: [GatewayProviderCatalogItem] = []
+    var models: [GatewayModel] = []
+    var combos: [GatewayCombo] = []
+    var consoleLogs: [GatewayConsoleLog] = []
+    var callLogs: [GatewayCallLog] = []
+    var unavailableSections: Set<DashboardSection> = []
+
+    static func placeholder(health: GatewayHealth) -> GatewayDashboard {
+        GatewayDashboard(health: health)
+    }
+}
+
+struct GatewayMemory: Hashable, Sendable {
+    var rssBytes: Double?
+    var heapUsedBytes: Double?
+    var heapTotalBytes: Double?
+}
+
+struct GatewayTokenPool: Hashable, Sendable {
+    var recurring: Double?
+    var firstMonth: Double?
+    var boost: Double?
+    var modelCount: Int?
+}
+
+struct GatewayProviderSummary: Hashable, Sendable {
+    var active: Int?
+    var configured: Int?
+    var catalog: Int?
+}
+
+struct GatewayProvider: Identifiable, Hashable, Sendable {
+    var id: String
+    var name: String
+    var provider: String
+    var authType: String?
+    var isActive: Bool?
+    var modelCount: Int?
+    var testStatus: String?
+}
+
+struct GatewayProviderCatalogItem: Identifiable, Hashable, Sendable {
+    var id: String
+    var name: String
+    var authType: String?
+    var modelCount: Int
+    var isFreeTier: Bool
+}
+
+struct GatewayModel: Identifiable, Hashable, Sendable {
+    var id: String
+    var name: String
+    var provider: String
+    var available: Bool?
+}
+
+struct GatewayCombo: Identifiable, Hashable, Sendable {
+    var id: String
+    var name: String
+    var candidateCount: Int?
+    var contextLength: Int?
+}
+
+struct GatewayConsoleLog: Identifiable, Hashable, Sendable {
+    var id: String
+    var timestamp: String
+    var level: String
+    var component: String?
+    var message: String
+}
+
+struct GatewayCallLog: Identifiable, Hashable, Sendable {
+    var id: String
+    var timestamp: String
+    var model: String?
+    var provider: String?
+    var status: Int?
+    var durationMilliseconds: Double?
+    var error: String?
 }
 
 struct GatewayURL {
