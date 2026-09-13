@@ -16,6 +16,7 @@
 		B807FD29A0E17990D673092B /* GatewayRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05102BEDB066C7918F33EE09 /* GatewayRootView.swift */; };
 		CFC8D066A795C91466261D3F /* ConnectionEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6505240013C5C8BFEFAB82A /* ConnectionEditor.swift */; };
 		D2FBD09052CD0AA20B97D7C0 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648125D4682EE45559F9316F /* KeychainStore.swift */; };
+		F0E55DA26E612CA958107CAC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C81B3D17D0B823A9D57C2503 /* Assets.xcassets */; };
 		FBE05A9891DDEC3EE4A0DC7B /* GatewayURLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD3D77590684D2131E0420A0 /* GatewayURLTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +42,7 @@
 		943E0D1EB094D7822B86A2DC /* GatewayModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayModels.swift; sourceTree = "<group>"; };
 		BD3D77590684D2131E0420A0 /* GatewayURLTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayURLTests.swift; sourceTree = "<group>"; };
 		C6505240013C5C8BFEFAB82A /* ConnectionEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionEditor.swift; sourceTree = "<group>"; };
+		C81B3D17D0B823A9D57C2503 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C960D1EE8762318D85C043B2 /* GatewayHubApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayHubApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -94,6 +96,7 @@
 		B5941FCAA8BA39DA015614CB /* GatewayHub */ = {
 			isa = PBXGroup;
 			children = (
+				C81B3D17D0B823A9D57C2503 /* Assets.xcassets */,
 				DC7A8C2A641097438032E299 /* App */,
 				C0C17378FB83324AC0F9E670 /* Domain */,
 				0DDE170F4515F17B6137324D /* Services */,
@@ -128,6 +131,7 @@
 			buildConfigurationList = 49983C314B20910A2887B020 /* Build configuration list for PBXNativeTarget "FreeLLMAPConnect" */;
 			buildPhases = (
 				9E746B5F49D397949405690D /* Sources */,
+				6A833F0C30E0641B59E59659 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -194,6 +198,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6A833F0C30E0641B59E59659 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F0E55DA26E612CA958107CAC /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		2720198CD0CBA563CA5A6D7C /* Sources */ = {
@@ -304,16 +319,19 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Gateway Hub";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSAppTransportSecurity_NSAllowsArbitraryLoads = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.qartex.freellmapconnect;
 				PRODUCT_MODULE_NAME = FreeLLMAPConnect;
-				PRODUCT_NAME = "FreeLLMAP Connect";
+				PRODUCT_NAME = FreeLLMAPConnect;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -326,16 +344,19 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Gateway Hub";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSAppTransportSecurity_NSAllowsArbitraryLoads = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.qartex.freellmapconnect;
 				PRODUCT_MODULE_NAME = FreeLLMAPConnect;
-				PRODUCT_NAME = "FreeLLMAP Connect";
+				PRODUCT_NAME = FreeLLMAPConnect;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -352,7 +373,7 @@
 				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FreeLLMAP Connect.app/FreeLLMAP Connect";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FreeLLMAPConnect.app/FreeLLMAPConnect";
 			};
 			name = Debug;
 		};
@@ -367,7 +388,7 @@
 				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FreeLLMAP Connect.app/FreeLLMAP Connect";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FreeLLMAPConnect.app/FreeLLMAPConnect";
 			};
 			name = Release;
 		};

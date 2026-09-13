@@ -17,13 +17,16 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.qartex.freellmapconnect
-        PRODUCT_NAME: FreeLLMAP Connect
+        PRODUCT_NAME: FreeLLMAPConnect
         PRODUCT_MODULE_NAME: FreeLLMAPConnect
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_CFBundleDisplayName: Gateway Hub
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortraitUpsideDown
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortraitUpsideDown
         # OmniRoute is currently exposed at an HTTP IP address. The app warns users
         # before allowing it; use HTTPS for every public production instance.
         INFOPLIST_KEY_NSAppTransportSecurity_NSAllowsArbitraryLoads: YES
@@ -39,5 +42,5 @@ targets:
       - target: FreeLLMAPConnect
     settings:
       base:
-        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/FreeLLMAP Connect.app/FreeLLMAP Connect"
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/FreeLLMAPConnect.app/FreeLLMAPConnect"
         BUNDLE_LOADER: "$(TEST_HOST)"
