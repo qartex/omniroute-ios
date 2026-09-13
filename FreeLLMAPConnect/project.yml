@@ -42,5 +42,6 @@ targets:
       - target: FreeLLMAPConnect
     settings:
       base:
+        GENERATE_INFOPLIST_FILE: YES
         TEST_HOST: "$(BUILT_PRODUCTS_DIR)/FreeLLMAPConnect.app/FreeLLMAPConnect"
         BUNDLE_LOADER: "$(TEST_HOST)"
